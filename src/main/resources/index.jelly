@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+  Allows build pipelines to wait for notification from an external system before continuing.
+</div>
