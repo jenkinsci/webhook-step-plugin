@@ -5,8 +5,9 @@ This pipeline plugin provides an easy way to block a build pipeline until an
 external system posts to a webhook. This can be used to integrate long running
 tasks into a pipeline, without busy waiting.
 
-It is already possible to wait for an external system to post using the `input`
-step, but is more complex. To use `input`, and external system must authenticate 
+It is already possible to wait for an external system to post [using the `input`
+step](https://cpitman.github.io/jenkins/cicd/2017/03/16/waiting-for-remote-systems-in-a-jenkins-pipeline.html), 
+but is more complex. To use `input`, an external system must authenticate 
 to Jenkins, retrieve a Jenkins-Crumb for CSRF protection, then post data in an 
 `input` specific format. This plugin uses unique tokens as an implicit form of
 authentication and accepts any content that is posted.
