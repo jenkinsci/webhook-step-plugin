@@ -30,7 +30,7 @@
 
   <name>Webhook Step Plugin</name>
   <description>Allows a plugin to block until a webhook is called by an external system.</description>
-  <url>https://github.com/cpitman/webhook-step</url>
+  <url></url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
 
@@ -47,13 +47,13 @@
       <name>Chris Pitman</name>
     </developer>
   </developers>
-  <!-- Assuming you want to host on @jenkinsci:
+
   <scm>
     <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
   </scm>
-   -->
+
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
