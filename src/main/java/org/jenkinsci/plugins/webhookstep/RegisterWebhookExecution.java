@@ -7,17 +7,14 @@ public class RegisterWebhookExecution extends AbstractSynchronousStepExecution<W
 
     private static final long serialVersionUID = -6718328636399912927L;
 
-    StepContext context;
-
     public RegisterWebhookExecution(StepContext context) {
         super(context);
-        this.context = context;
     }
 
     @Override
     public WebhookToken run() throws Exception {
         String token = java.util.UUID.randomUUID().toString();
-        String jenkinsUrl = context.get(hudson.EnvVars.class).get("JENKINS_URL");
+        String jenkinsUrl = getContext().get(hudson.EnvVars.class).get("JENKINS_URL");
         if (jenkinsUrl == null || jenkinsUrl.isEmpty()) {
             throw new RuntimeException("JENKINS_URL must be set in the Manage Jenkins console");
         }
