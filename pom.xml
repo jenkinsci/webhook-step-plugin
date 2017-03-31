@@ -20,8 +20,8 @@
   </properties>
 
   <name>Webhook Step Plugin</name>
-  <description>Allows a plugin to block until a webhook is called by an external system.</description>
-  <url />
+  <description>Allows a pipeline to block until a webhook is called by an external system.</description>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Webhook+Step+Plugin</url>
 
   <licenses>
     <license>
