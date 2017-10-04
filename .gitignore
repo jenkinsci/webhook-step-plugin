@@ -4,6 +4,10 @@ work/
 nbactions.xml
 pom.xml.releaseBackup
 release.properties
+.classpath
+.project
+.settings
+.vscode
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

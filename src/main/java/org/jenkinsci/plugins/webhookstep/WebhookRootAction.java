@@ -17,7 +17,6 @@ import hudson.security.csrf.CrumbExclusion;
 import java.io.BufferedReader;
 import java.nio.CharBuffer;
 import java.util.logging.Logger;
-import org.apache.commons.io.IOUtils;
 
 @Extension
 public class WebhookRootAction extends CrumbExclusion implements UnprotectedRootAction {
@@ -43,21 +42,19 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
     public void doDynamic(StaplerRequest request, StaplerResponse response) {
         String token = request.getOriginalRestOfPath().substring(1); //Strip leading slash
 
-        CharBuffer dest = CharBuffer.allocate(request.getContentLength());
-
+        CharBuffer dest = CharBuffer.allocate(1024);
+        StringBuffer content = new StringBuffer();
         try {
             BufferedReader reader = request.getReader();
 
             while (reader.read(dest) > 0) {
-                //Intentionally blank
+                dest.rewind();
+                content.append(dest.toString());
             }
         } catch (IOException e) {
             response.setStatus(400);
             return;
         }
-
-        dest.rewind();
-        String content = dest.toString();
 
         Logger.getLogger(WebhookRootAction.class.getName())
                 .info("Webhook called with " + token);
@@ -68,12 +65,12 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             if (exec == null) {
                 //pipeline has not yet waited on webhook, add an entry to track 
                 //that it was already triggered
-                alreadyPosted.put(token, content);
+                alreadyPosted.put(token, content.toString());
             }
         }
 
         if (exec != null) {
-            exec.onTriggered(content);
+            exec.onTriggered(content.toString());
             response.setHeader("Result", "WebhookTriggered");
             response.setStatus(200);
         } else {
