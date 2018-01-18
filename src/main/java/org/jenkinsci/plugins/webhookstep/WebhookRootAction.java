@@ -46,10 +46,13 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         StringBuffer content = new StringBuffer();
         try {
             BufferedReader reader = request.getReader();
+            int len;
 
-            while (reader.read(dest) > 0) {
+            while ((len = reader.read(dest)) > 0) {
                 dest.rewind();
+                dest.limit(len);
                 content.append(dest.toString());
+                dest.limit(dest.capacity());
             }
         } catch (IOException e) {
             response.setStatus(400);
@@ -63,7 +66,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         synchronized (webhooks) {
             exec = webhooks.remove(token);
             if (exec == null) {
-                //pipeline has not yet waited on webhook, add an entry to track 
+                //pipeline has not yet waited on webhook, add an entry to track
                 //that it was already triggered
                 alreadyPosted.put(token, content.toString());
             }
