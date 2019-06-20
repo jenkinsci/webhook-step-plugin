@@ -1,9 +1,11 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.AbstractSynchronousStepExecution;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 
 import javax.inject.Inject;
+import java.net.URLEncoder;
 
 public class RegisterWebhookExecution extends AbstractSynchronousStepExecution<WebhookToken> {
 
@@ -19,9 +21,9 @@ public class RegisterWebhookExecution extends AbstractSynchronousStepExecution<W
 
     @Override
     public WebhookToken run() throws Exception {
-        String token = (step == null || step.token  == null )
+        String token = (step == null || StringUtils.isEmpty(step.token))
                 ? java.util.UUID.randomUUID().toString()
-                : step.token;
+                : URLEncoder.encode(step.token, "UTF-8");
         String jenkinsUrl = getContext().get(hudson.EnvVars.class).get("JENKINS_URL");
         if (jenkinsUrl == null || jenkinsUrl.isEmpty()) {
             throw new RuntimeException("JENKINS_URL must be set in the Manage Jenkins console");

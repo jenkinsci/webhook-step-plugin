@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import hudson.util.FormValidation;
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
@@ -7,26 +9,43 @@ import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.QueryParameter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegisterWebhookStep extends Step {
-
-    final String token;
 
     @DataBoundConstructor
     public RegisterWebhookStep() {
         this.token = null;
     }
 
-    public RegisterWebhookStep(String token) throws UnsupportedEncodingException {
-        if(token != null && !token.equals(URLEncoder.encode(token, "UTF-8"))) {
-            throw new IllegalArgumentException(
-                    String.format("bad token [%s], it should be passed in urlencoded format [%s]",
-                            token, URLEncoder.encode(token, "UTF-8")));
-        }
+    String token;
+
+    public String getToken() {
+        return this.token;
+    }
+
+    @DataBoundSetter
+    public void setToken(String token) {
         this.token = token;
+    }
+    public FormValidation doCheckToken(@QueryParameter String value) {
+        try {
+            if (StringUtils.isEmpty(value) || token.equals(URLEncoder.encode(token, "UTF-8"))) {
+                return FormValidation.ok();
+            }
+        } catch (UnsupportedEncodingException e) {
+            Logger.getLogger(this.getClass().getName())
+                    .log(Level.FINE, String.format("bad tocken: %s", token), e);
+            return FormValidation.warning(String.format(
+                    "bad encoding for token [%s]: %s", token, e.getLocalizedMessage()));
+        }
+        return FormValidation.warning(String.format("bad token [%s], it should be passed in urlencoded format", token));
     }
 
     @Override
