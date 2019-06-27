@@ -48,7 +48,11 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             BufferedReader reader = request.getReader();
 
             while (reader.read(dest) > 0) {
-                dest.rewind();
+                // Here if you just rewind() the buffer, and the content length is greater than 1024, but not exactly
+                // a multiple of it, you reset the pointer of the buffer to position zero, so when you read the next batch,
+                // you end up appending the correct remainig characters plus a number of old characters that should not
+                // be appended, and end up corrupting the data.
+                dest = CharBuffer.allocate(1024);
                 content.append(dest.toString());
             }
         } catch (IOException e) {
