@@ -23,6 +23,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
     private static final HashMap<String, WaitForWebhookExecution> webhooks = new HashMap<>();
     private static final HashMap<String, String> alreadyPosted = new HashMap<>();
+    private static final HashMap<String, String> authTokens = new HashMap<>();
 
     @Override
     public String getDisplayName() {
@@ -41,6 +42,24 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
     public void doDynamic(StaplerRequest request, StaplerResponse response) {
         String token = request.getOriginalRestOfPath().substring(1); //Strip leading slash
+        String authHeader = request.getHeader("Authorization");
+        String authToken;
+
+        synchronized (authTokens) {
+            authToken = authTokens.get(token);
+        }
+
+        if (authToken != null) {
+            if (!authToken.equals(authHeader)) {
+                response.setHeader("Result", "Unauthorized");
+                response.setStatus(403);
+                return;
+            }
+        } else if (authHeader != null) {
+            Logger.getLogger(WebhookRootAction.class.getName())
+                .warning("Unexpected Authorization header for Webhook " +
+                         token);
+        }
 
         CharBuffer dest = CharBuffer.allocate(1024);
         StringBuffer content = new StringBuffer();
@@ -79,7 +98,12 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         } else {
             response.setStatus(202);
         }
+    }
 
+    public static void registerAuthToken(WebhookToken hook) {
+        synchronized (authTokens) {
+            authTokens.put(hook.getToken(), hook.getAuthToken());
+        }
     }
 
     //Returns null when the webhook has been registered, the content when the webhook has already been called
@@ -101,6 +125,9 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
                 .info("Deregistering webhook with token " + exec.getToken());
         synchronized (webhooks) {
             webhooks.remove(exec.getToken());
+        }
+        synchronized (authTokens) {
+            authTokens.remove(exec.getToken());
         }
     }
 

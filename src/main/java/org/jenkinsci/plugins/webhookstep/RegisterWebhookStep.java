@@ -10,14 +10,16 @@ import hudson.Extension;
 
 public class RegisterWebhookStep extends Step {
 
-    @DataBoundConstructor
-    public RegisterWebhookStep() {
+    private final String authToken;
 
+    @DataBoundConstructor
+    public RegisterWebhookStep(String authToken) {
+        this.authToken = authToken;
     }
 
     @Override
     public StepExecution start(StepContext context) throws Exception {
-        return new RegisterWebhookExecution(context);
+        return new RegisterWebhookExecution(context, this.authToken);
     }
 
     @Override

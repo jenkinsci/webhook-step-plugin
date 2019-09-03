@@ -6,9 +6,15 @@ import org.jenkinsci.plugins.workflow.steps.StepContext;
 public class RegisterWebhookExecution extends AbstractSynchronousStepExecution<WebhookToken> {
 
     private static final long serialVersionUID = -6718328636399912927L;
+    private final String authToken;
 
-    public RegisterWebhookExecution(StepContext context) {
+    public RegisterWebhookExecution(StepContext context, String authToken) {
         super(context);
+        this.authToken = authToken;
+    }
+
+    public String getAuthToken() {
+        return this.authToken;
     }
 
     @Override
@@ -22,6 +28,9 @@ public class RegisterWebhookExecution extends AbstractSynchronousStepExecution<W
         java.net.URI relative = new java.net.URI("webhook-step/" + token);
         java.net.URI path = baseUri.resolve(relative);
 
-        return new WebhookToken(token, path.toString());
+        WebhookToken hook = new WebhookToken(
+            token, path.toString(), this.authToken);
+        WebhookRootAction.registerAuthToken(hook);
+        return hook;
     }
 }
