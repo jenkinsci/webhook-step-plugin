@@ -41,7 +41,7 @@ public class RegisterWebhookStep extends Step {
             }
         } catch (UnsupportedEncodingException e) {
             Logger.getLogger(this.getClass().getName())
-                    .log(Level.FINE, String.format("bad tocken: %s", token), e);
+                    .log(Level.FINE, String.format("bad token: %s", token), e);
             return FormValidation.warning(String.format(
                     "bad encoding for token [%s]: %s", token, e.getLocalizedMessage()));
         }
