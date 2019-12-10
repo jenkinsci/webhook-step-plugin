@@ -89,7 +89,7 @@ public class WaitForWebhookTest {
         j.assertBuildStatus(Result.SUCCESS, r);
         j.assertLogContains("token=test-token", r);
         j.assertLogContains("\"action\":\"done\"", r);
-        j.assertLogContains("Cache-Control -> no-cache", r);
+        j.assertLogContains("Jenkins-Crumb -> test", r);
     }
 
     @Test
