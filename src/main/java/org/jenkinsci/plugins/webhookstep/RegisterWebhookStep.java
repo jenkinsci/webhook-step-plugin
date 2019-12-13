@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 
 public class RegisterWebhookStep extends Step {
 
+    String token;
+
     @DataBoundConstructor
     public RegisterWebhookStep() {
         this.token = null;
     }
-
-    String token;
 
     public String getToken() {
         return this.token;
@@ -34,6 +34,7 @@ public class RegisterWebhookStep extends Step {
     public void setToken(String token) {
         this.token = token;
     }
+
     public FormValidation doCheckToken(@QueryParameter String value) {
         try {
             if (StringUtils.isEmpty(value) || token.equals(URLEncoder.encode(token, "UTF-8"))) {

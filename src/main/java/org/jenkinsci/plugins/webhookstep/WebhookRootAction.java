@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.webhookstep;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.servlet.FilterChain;
@@ -14,15 +15,18 @@ import org.kohsuke.stapler.StaplerResponse;
 import hudson.Extension;
 import hudson.model.UnprotectedRootAction;
 import hudson.security.csrf.CrumbExclusion;
+import org.kohsuke.stapler.verb.POST;
+
 import java.io.BufferedReader;
 import java.nio.CharBuffer;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Extension
 public class WebhookRootAction extends CrumbExclusion implements UnprotectedRootAction {
 
     private static final HashMap<String, WaitForWebhookExecution> webhooks = new HashMap<>();
-    private static final HashMap<String, String> alreadyPosted = new HashMap<>();
+    private static final HashMap<String, WebhookResponse> alreadyPosted = new HashMap<>();
 
     @Override
     public String getDisplayName() {
@@ -39,6 +43,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         return "webhook-step";
     }
 
+    @POST
     public void doDynamic(StaplerRequest request, StaplerResponse response) {
         String token = request.getOriginalRestOfPath().substring(1); //Strip leading slash
 
@@ -59,6 +64,15 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             return;
         }
 
+        Map<String, String> headers = new HashMap<String, String>();
+        Enumeration<String> iter = request.getHeaderNames();
+        while(iter.hasMoreElements()) {
+            String header = iter.nextElement();
+            headers.put(header, request.getHeader(header));
+        }
+
+        WebhookResponse whResponse = new WebhookResponse(content.toString(), headers);
+
         Logger.getLogger(WebhookRootAction.class.getName())
                 .info("Webhook called with " + token);
 
@@ -68,12 +82,12 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             if (exec == null) {
                 //pipeline has not yet waited on webhook, add an entry to track
                 //that it was already triggered
-                alreadyPosted.put(token, content.toString());
+                alreadyPosted.put(token, whResponse);
             }
         }
 
         if (exec != null) {
-            exec.onTriggered(content.toString());
+            exec.onTriggered(whResponse);
             response.setHeader("Result", "WebhookTriggered");
             response.setStatus(200);
         } else {
@@ -83,7 +97,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
     }
 
     //Returns null when the webhook has been registered, the content when the webhook has already been called
-    public static String registerWebhook(WaitForWebhookExecution exec) {
+    public static WebhookResponse registerWebhook(WaitForWebhookExecution exec) {
         Logger.getLogger(WebhookRootAction.class.getName())
                 .info("Registering webhook with token " + exec.getToken());
         synchronized (webhooks) {
