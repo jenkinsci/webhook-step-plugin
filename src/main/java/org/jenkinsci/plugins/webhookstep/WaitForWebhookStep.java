@@ -1,10 +1,12 @@
 package org.jenkinsci.plugins.webhookstep;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
 
-import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
+import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
 import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -42,10 +44,10 @@ public class WaitForWebhookStep extends Step implements Serializable {
     }
 
     @Extension
-    public static class DescriptorImpl extends AbstractStepDescriptorImpl {
+    public static class DescriptorImpl extends StepDescriptor {
 
         public DescriptorImpl() {
-            super(WaitForWebhookExecution.class);
+
         }
 
         @Override
@@ -55,7 +57,12 @@ public class WaitForWebhookStep extends Step implements Serializable {
 
         @Override
         public String getDisplayName() {
-            return "Wait for webhook to be posted to by external system";
+            return "Wait for webhook to be POSTed to by external system";
+        }
+
+        @Override
+        public Set<Class<?>> getRequiredContext() {
+            return Collections.emptySet();
         }
     }
 }
