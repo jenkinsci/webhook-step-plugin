@@ -1,11 +1,7 @@
 package org.jenkinsci.plugins.webhookstep;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import hudson.FilePath;
 import hudson.model.Result;
-import jdk.nashorn.internal.parser.JSONParser;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
@@ -17,7 +13,6 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static net.javacrumbs.jsonunit.JsonAssert.when;
