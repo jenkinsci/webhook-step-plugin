@@ -5,8 +5,8 @@ import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 import java.util.Map;
 
 public class WebhookResponse {
-    private String content;
-    private Map<String, String> headers;
+    private final String content;
+    private final Map<String, String> headers;
 
     public WebhookResponse(String content, Map<String, String> headers) {
         this.content = content;

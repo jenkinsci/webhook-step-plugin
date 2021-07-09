@@ -48,7 +48,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         String token = request.getOriginalRestOfPath().substring(1); //Strip leading slash
 
         CharBuffer dest = CharBuffer.allocate(1024);
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         try {
             BufferedReader reader = request.getReader();
             int len;
@@ -56,7 +56,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             while ((len = reader.read(dest)) > 0) {
                 dest.rewind();
                 dest.limit(len);
-                content.append(dest.toString());
+                content.append(dest);
                 dest.limit(dest.capacity());
             }
         } catch (IOException e) {
@@ -64,7 +64,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             return;
         }
 
-        Map<String, String> headers = new HashMap<String, String>();
+        Map<String, String> headers = new HashMap<>();
         Enumeration<String> iter = request.getHeaderNames();
         while(iter.hasMoreElements()) {
             String header = iter.nextElement();

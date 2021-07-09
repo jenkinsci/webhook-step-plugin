@@ -28,7 +28,7 @@ public class WaitForWebhookTest {
     public void testCreateSimpleWebhook() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 
-        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook()\necho \"hookurl=${hook.url}\""));
+        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook()\necho \"hookurl=${hook.getURL()}\"", true));
         WorkflowRun b = p.scheduleBuild2(0).waitForStart();
 
         j.waitForCompletion(b);
@@ -40,7 +40,7 @@ public class WaitForWebhookTest {
     public void testUseCustomToken() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 
-        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\""));
+        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"", true));
         WorkflowRun b = p.scheduleBuild2(0).waitForStart();
 
         j.waitForCompletion(b);
@@ -54,7 +54,7 @@ public class WaitForWebhookTest {
         URL url = this.getClass().getResource("/simple.json");
         String content = FileUtils.readFileToString(new File(url.getFile()));
 
-        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook)\necho \"${data}\""));
+        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook)\necho \"${data}\"", true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -73,7 +73,7 @@ public class WaitForWebhookTest {
         URL url = this.getClass().getResource("/simple.json");
         String content = FileUtils.readFileToString(new File(url.getFile()));
 
-        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook, withHeaders: true)\necho \"${data.content}\"\necho \"${data.headers.size()}\"\nfor(k in data.headers.keySet()) {  echo \"${k} -> ${data.headers[k]}\"}"));
+        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook, withHeaders: true)\necho \"${data.content}\"\necho \"${data.headers.size()}\"\nfor(k in data.headers.keySet()) {  echo \"${k} -> ${data.headers[k]}\"}", true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);

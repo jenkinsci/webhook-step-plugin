@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
@@ -39,22 +40,19 @@ public class WaitForWebhookStep extends Step implements Serializable {
     }
 
     @Override
-    public StepExecution start(StepContext context) throws Exception {
+    public StepExecution start(StepContext context) {
         return new WaitForWebhookExecution(context, this);
     }
 
     @Extension
     public static class DescriptorImpl extends StepDescriptor {
 
-        public DescriptorImpl() {
-
-        }
-
         @Override
         public String getFunctionName() {
             return "waitForWebhook";
         }
 
+        @NonNull
         @Override
         public String getDisplayName() {
             return "Wait for webhook to be POSTed to by external system";

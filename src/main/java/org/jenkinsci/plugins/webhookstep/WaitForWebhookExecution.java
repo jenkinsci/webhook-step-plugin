@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepExecutionImpl;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 
@@ -35,7 +36,7 @@ public class WaitForWebhookExecution extends AbstractStepExecutionImpl {
     }
 
     @Override
-    public void stop(Throwable cause) throws Exception {
+    public void stop(@NonNull Throwable cause) {
         WebhookRootAction.deregisterWebhook(this);
         getContext().onFailure(cause);
     }
