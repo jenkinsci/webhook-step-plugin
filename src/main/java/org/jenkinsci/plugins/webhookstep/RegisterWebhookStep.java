@@ -58,10 +58,6 @@ public class RegisterWebhookStep extends Step {
         return new RegisterWebhookExecution(this, context);
     }
 
-    @Override
-    public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl) super.getDescriptor();
-    }
 
     @Extension
     public static class DescriptorImpl extends StepDescriptor {
