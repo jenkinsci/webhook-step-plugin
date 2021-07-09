@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegisterWebhookStep extends Step {
+
     String token;
 
     @DataBoundConstructor
