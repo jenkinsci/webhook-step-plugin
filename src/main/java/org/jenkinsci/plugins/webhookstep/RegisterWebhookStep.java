@@ -1,10 +1,12 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.EnvVars;
 import hudson.util.FormValidation;
 import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
+import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
 import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -14,11 +16,12 @@ import org.kohsuke.stapler.QueryParameter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegisterWebhookStep extends Step {
-
     String token;
 
     @DataBoundConstructor
@@ -50,7 +53,7 @@ public class RegisterWebhookStep extends Step {
     }
 
     @Override
-    public StepExecution start(StepContext context) throws Exception {
+    public StepExecution start(StepContext context) {
         return new RegisterWebhookExecution(this, context);
     }
 
@@ -60,10 +63,10 @@ public class RegisterWebhookStep extends Step {
     }
 
     @Extension
-    public static class DescriptorImpl extends AbstractStepDescriptorImpl {
-
-        public DescriptorImpl() {
-            super(RegisterWebhookExecution.class);
+    public static class DescriptorImpl extends StepDescriptor {
+        @Override
+        public Set<? extends Class<?>> getRequiredContext() {
+            return Collections.singleton(EnvVars.class);
         }
 
         @Override
@@ -71,6 +74,7 @@ public class RegisterWebhookStep extends Step {
             return "registerWebhook";
         }
 
+        @NonNull
         @Override
         public String getDisplayName() {
             return "Creates and returns a webhook that can be used by an external system to notify a pipeline";

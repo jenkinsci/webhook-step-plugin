@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import java.net.URLEncoder;
 
 public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookToken> {
-
     private static final long serialVersionUID = -6718328636399912927L;
 
     @Inject

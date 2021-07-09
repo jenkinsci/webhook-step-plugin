@@ -49,7 +49,7 @@ public class WaitForWebhookRestartTest {
                                "  semaphore 'started'\n" +
                                "  def data = waitForWebhook(hook)\n" +
                                "  echo \"${data}\"" +
-                               "}"));
+                               "}", true));
 
                 WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
                 SemaphoreStep.waitForStart("started/1", b);
