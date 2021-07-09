@@ -28,7 +28,7 @@ public class WaitForWebhookTest {
     public void testCreateSimpleWebhook() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 
-        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook()\necho \"hookurl=${hook.url}\"", true));
+        p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook()\necho \"hookurl=${hook.getURL()}\"", true));
         WorkflowRun b = p.scheduleBuild2(0).waitForStart();
 
         j.waitForCompletion(b);
