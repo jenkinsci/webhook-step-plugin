@@ -5,21 +5,26 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.49</version>
+    <version>4.29</version>
     <relativePath />
   </parent>
-  <groupId>org.jenkins-ci.plugins</groupId>
+
+  <!-- <groupId>org.jenkins-ci.plugins</groupId> -->
   <artifactId>webhook-step</artifactId>
   <version>1.5-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
-    <jenkins.version>2.138.4</jenkins.version>
+    <jenkins.version>2.289.1</jenkins.version>
     <java.level>8</java.level>
+    <spotbugs.effort>Max</spotbugs.effort>
+    <spotbugs.failOnError>true</spotbugs.failOnError>
+    <spotbugs.threshold>Low</spotbugs.threshold>
   </properties>
 
   <name>Webhook Step Plugin</name>
   <description>Allows a pipeline to block until a webhook is called by an external system.</description>
+  <!-- FIXME: change the url -->
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Webhook+Step+Plugin</url>
 
   <licenses>
@@ -38,10 +43,11 @@
   </developers>
 
   <scm>
+    <!-- FIXME: change variable for the github repo -->
     <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>HEAD</tag>
+    <tag>${scmTag}</tag>
   </scm>
 
   <repositories>
@@ -61,8 +67,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.138.x</artifactId>
-        <version>3</version>
+        <artifactId>bom-2.289.x</artifactId>
+        <version>987.v4ade2e49fe70</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -129,7 +135,7 @@
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <version>2.1</version>
+      <version>2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
