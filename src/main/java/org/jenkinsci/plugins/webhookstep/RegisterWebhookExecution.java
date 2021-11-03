@@ -4,14 +4,14 @@ import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 
-import javax.inject.Inject;
+// import javax.inject.Inject;
 import java.net.URLEncoder;
 
 public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookToken> {
 
     private static final long serialVersionUID = -6718328636399912927L;
 
-    @Inject
+    // @Inject
     private transient RegisterWebhookStep step;
 
     public RegisterWebhookExecution(RegisterWebhookStep step, StepContext context) {

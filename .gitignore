@@ -3,6 +3,7 @@ target/
 work/
 nbactions.xml
 pom.xml.releaseBackup
+.factorypath
 release.properties
 .classpath
 .project
