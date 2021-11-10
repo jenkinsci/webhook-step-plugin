@@ -8,6 +8,7 @@ release.properties
 .project
 .settings
 .vscode
+.factorypath
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
