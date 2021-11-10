@@ -3,7 +3,6 @@ package org.jenkinsci.plugins.webhookstep;
 import hudson.FilePath;
 import hudson.model.Result;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -91,7 +90,9 @@ public class WaitForWebhookTest {
     public void testLargeDataMessage() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
         URL url = this.getClass().getResource("/large.json");
-        String content = FileUtils.readFileToString(new File(url.getFile()));
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
 
         p.setDefinition(new CpsFlowDefinition("node {\ndef hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(hook)\nwriteFile(file: 'large.json', text: data)\n}", true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
@@ -103,10 +104,11 @@ public class WaitForWebhookTest {
         j.waitForCompletion(r);
         j.assertBuildStatus(Result.SUCCESS, r);
 
-        FilePath output = j.jenkins.getWorkspaceFor(p).child("large.json");
-        assertTrue(output.exists());
+        FilePath outputFilePath = j.jenkins.getWorkspaceFor(p).child("large.json");
+        assertTrue(outputFilePath.exists());
         j.assertLogContains("token=test-token", r);
 
-        assertJsonEquals(content, IOUtils.toString(output.read()), when(IGNORING_ARRAY_ORDER));
+        String output = outputFilePath.readToString();
+        assertJsonEquals(content, output, when(IGNORING_ARRAY_ORDER));
     }
 }
