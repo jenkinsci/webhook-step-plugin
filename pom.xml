@@ -10,12 +10,11 @@
   </parent>
 
   <artifactId>webhook-step</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>${changelist}</version>
   <packaging>hpi</packaging>
 
   <properties>
-    <revision>1.5</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
     <jenkins.version>2.289.1</jenkins.version>
     <java.level>8</java.level>
