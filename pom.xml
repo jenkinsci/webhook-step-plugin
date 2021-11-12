@@ -38,6 +38,11 @@
       <name>Chris Pitman</name>
       <email>cpitman1@gmail.com</email>
     </developer>
+    <developer>
+      <id>jmMeessen</id>
+      <name>Jean-Marc Meessen</name>
+      <email>jean-marc@meessen-web.org</email>
+    </developer>
   </developers>
 
   <scm>
