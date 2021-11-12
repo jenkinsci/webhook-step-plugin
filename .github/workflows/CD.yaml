@@ -3,9 +3,10 @@
 name: cd
 on:
   workflow_dispatch:
-  check_run:
-    types:
-      - completed
+  # Commenting out to deploy explicitly (not on every push on master)
+  # check_run:
+  #   types:
+  #     - completed
 
 jobs:
   validate:
