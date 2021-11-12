@@ -10,3 +10,7 @@ updates:
   - jmMeessen
   labels:
   - skip-changelog
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: daily
