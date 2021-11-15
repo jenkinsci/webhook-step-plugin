@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import hudson.FilePath;
 import hudson.model.Result;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
@@ -26,9 +27,12 @@ public class WaitForWebhookRestartTest {
     @Test
     public void testWaitHook() throws Exception {
         URL url = this.getClass().getResource("/simple.json");
-        String content = FileUtils.readFileToString(new File(url.getFile()));
 
-        rr.addStep(new Statement() {
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
+        
+        rr.addStep(new Statement() {    
             @Override
             public void evaluate() throws Throwable {
                 WorkflowJob p = rr.j.jenkins.createProject(WorkflowJob.class, "prj");
