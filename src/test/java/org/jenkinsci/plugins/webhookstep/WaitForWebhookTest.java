@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.webhookstep;
 
 import hudson.FilePath;
 import hudson.model.Result;
-import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -51,7 +50,10 @@ public class WaitForWebhookTest {
     public void testWaitHook() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
         URL url = this.getClass().getResource("/simple.json");
-        String content = FileUtils.readFileToString(new File(url.getFile()));
+
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
 
         p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook)\necho \"${data}\"", true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
@@ -70,7 +72,9 @@ public class WaitForWebhookTest {
     public void testWaitHookWithHeaders() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
         URL url = this.getClass().getResource("/simple.json");
-        String content = FileUtils.readFileToString(new File(url.getFile()));
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
 
         p.setDefinition(new CpsFlowDefinition("def hook = registerWebhook(token: \"test-token\")\necho \"token=${hook.token}\"\ndef data = waitForWebhook(webhookToken: hook, withHeaders: true)\necho \"${data.content}\"\necho \"${data.headers.size()}\"\nfor(k in data.headers.keySet()) {  echo \"${k} -> ${data.headers[k]}\"}", true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
