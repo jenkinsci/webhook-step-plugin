@@ -2,14 +2,12 @@ package org.jenkinsci.plugins.webhookstep;
 
 import hudson.FilePath;
 import hudson.model.Result;
-import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 import org.jenkinsci.plugins.workflow.test.steps.SemaphoreStep;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runners.model.Statement;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.RestartableJenkinsRule;
 
@@ -32,42 +30,36 @@ public class WaitForWebhookRestartTest {
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
         
-        rr.addStep(new Statement() {    
-            @Override
-            public void evaluate() throws Throwable {
-                WorkflowJob p = rr.j.jenkins.createProject(WorkflowJob.class, "prj");
-                p.setDefinition(new CpsFlowDefinition(
-                        "node {\n" +
-                               "  def hook = registerWebhook(token: \"test-token\")\n" +
-                               "  echo \"token=${hook.token}\"\n" +
-                               "  semaphore 'started'\n" +
-                               "  def data = waitForWebhook(hook)\n" +
-                               "  echo \"${data}\"" +
-                               "}", true));
+        rr.then(rr -> {
+            WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
+            p.setDefinition(new CpsFlowDefinition(
+                    "node {\n" +
+                            "  def hook = registerWebhook(token: \"test-token\")\n" +
+                            "  echo \"token=${hook.token}\"\n" +
+                            "  semaphore 'started'\n" +
+                            "  def data = waitForWebhook(hook)\n" +
+                            "  echo \"${data}\"" +
+                            "}", true));
 
-                WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
-                SemaphoreStep.waitForStart("started/1", b);
-                assertTrue(JenkinsRule.getLog(b), b.isBuilding());
-            }
+            WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
+            SemaphoreStep.waitForStart("started/1", b);
+            assertTrue(JenkinsRule.getLog(b), b.isBuilding());
         });
 
-        rr.addStep(new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                WorkflowJob job = rr.j.jenkins.getItemByFullName("prj", WorkflowJob.class);
-                assertNotNull(job);
-                WorkflowRun run = job.getBuildByNumber(1);
-                assertNotNull(run);
+        rr.then(rr -> {    
+            WorkflowJob job = rr.jenkins.getItemByFullName("prj", WorkflowJob.class);
+            assertNotNull(job);
+            WorkflowRun run = job.getBuildByNumber(1);
+            assertNotNull(run);
 
-                SemaphoreStep.success("started/1", null);
+            SemaphoreStep.success("started/1", null);
 
-                rr.j.postJSON("webhook-step/test-token", content);
+            rr.postJSON("webhook-step/test-token", content);
 
-                rr.j.waitForCompletion(run);
-                rr.j.assertBuildStatus(Result.SUCCESS, run);
-                rr.j.assertLogContains("token=test-token", run);
-                rr.j.assertLogContains("\"action\":\"done\"", run);
-            }
+            rr.waitForCompletion(run);
+            rr.assertBuildStatus(Result.SUCCESS, run);
+            rr.assertLogContains("token=test-token", run);
+            rr.assertLogContains("\"action\":\"done\"", run);
         });
     }
 }
