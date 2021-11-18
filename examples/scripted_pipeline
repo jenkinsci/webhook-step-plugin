@@ -1,0 +1,18 @@
+node {
+    def mvnHome
+    stage('Stage 1') { // for display purposes
+        println("Killroy was here")
+    }
+    stage('waiting') {
+        hook = registerWebhook()
+        
+        echo "Waiting for POST to ${hook.getURL()}"
+        
+        data = waitForWebhook hook
+        
+        echo "Webhook called with data: ${data}"
+    }
+    stage('Stage 2') {
+        println("done")
+    }
+}
