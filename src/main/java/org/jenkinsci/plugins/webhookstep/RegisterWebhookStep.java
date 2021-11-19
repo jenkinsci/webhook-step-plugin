@@ -23,11 +23,22 @@ import java.util.logging.Logger;
 
 public class RegisterWebhookStep extends Step {
 
-    String token;
+    // Token identifies the webhook
+    String token; 
+
+    // authToken is the secret associated with the webHook
+    private final String authToken;
 
     @DataBoundConstructor
     public RegisterWebhookStep() {
         this.token = null;
+        this.authToken = null;
+    }
+
+    @DataBoundConstructor
+    public RegisterWebhookStep(String authToken) {
+        this.token = null;
+        this.authToken = authToken;
     }
 
     public String getToken() {
@@ -55,7 +66,7 @@ public class RegisterWebhookStep extends Step {
 
     @Override
     public StepExecution start(StepContext context) {
-        return new RegisterWebhookExecution(this, context);
+        return new RegisterWebhookExecution(this, context, this.authToken);
     }
 
 

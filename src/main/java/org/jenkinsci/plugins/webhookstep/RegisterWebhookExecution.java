@@ -10,13 +10,20 @@ import java.net.URLEncoder;
 public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookToken> {
 
     private static final long serialVersionUID = -6718328636399912927L;
+    private final String authToken;
+
 
     @Inject
     private transient RegisterWebhookStep step;
 
-    public RegisterWebhookExecution(RegisterWebhookStep step, StepContext context) {
+    public RegisterWebhookExecution(RegisterWebhookStep step, StepContext context, String authToken) {
         super(context);
         this.step = step;
+        this.authToken = authToken;
+    }
+
+    public String getAuthToken() {
+        return this.authToken;
     }
 
     @Override
@@ -32,6 +39,9 @@ public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookTo
         java.net.URI relative = new java.net.URI("webhook-step/" + token);
         java.net.URI path = baseUri.resolve(relative);
 
-        return new WebhookToken(token, path.toString());
+        WebhookToken hook = new WebhookToken(
+            token, path.toString(), this.authToken);
+        WebhookRootAction.registerAuthToken(hook);
+        return hook;
     }
 }
