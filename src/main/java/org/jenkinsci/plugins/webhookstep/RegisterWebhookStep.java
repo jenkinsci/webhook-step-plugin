@@ -35,7 +35,6 @@ public class RegisterWebhookStep extends Step {
         this.authToken = null;
     }
 
-    @DataBoundConstructor
     public RegisterWebhookStep(String authToken) {
         this.token = null;
         this.authToken = authToken;
