@@ -27,17 +27,12 @@ public class RegisterWebhookStep extends Step {
     String token; 
 
     // authToken is the secret associated with the webHook
-    private final String authToken;
+    private String authToken;
 
     @DataBoundConstructor
     public RegisterWebhookStep() {
         this.token = null;
         this.authToken = null;
-    }
-
-    public RegisterWebhookStep(String authToken) {
-        this.token = null;
-        this.authToken = authToken;
     }
 
     public String getToken() {
@@ -47,6 +42,11 @@ public class RegisterWebhookStep extends Step {
     @DataBoundSetter
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @DataBoundSetter
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
     public FormValidation doCheckToken(@QueryParameter String value) {

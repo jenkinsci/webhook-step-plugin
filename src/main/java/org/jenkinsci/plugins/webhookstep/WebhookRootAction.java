@@ -62,8 +62,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
             }
         } else if (authHeader != null) {
             Logger.getLogger(WebhookRootAction.class.getName())
-                .warning("Unexpected Authorization header for Webhook " +
-                         token);
+                .warning("Unexpected Authorization header for Webhook " + token);
         }
 
         CharBuffer dest = CharBuffer.allocate(1024);
