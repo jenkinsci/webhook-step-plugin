@@ -3,18 +3,20 @@ package org.jenkinsci.plugins.webhookstep;
 import java.io.Serializable;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 
+import hudson.util.Secret;
+
 public class WebhookToken implements Serializable {
 
     private static final long serialVersionUID = 1;
 
     private final String token;
     private final String url;
-    private final String authToken;
+    private final Secret secretAuthToken;
 
-    public WebhookToken(String token, String url, String authToken) {
+    public WebhookToken(String token, String url, Secret secretAuthToken) {
         this.token = token;
         this.url = url;
-        this.authToken = authToken;
+        this.secretAuthToken = secretAuthToken;
     }
 
     @Whitelisted
@@ -27,7 +29,7 @@ public class WebhookToken implements Serializable {
         return url;
     }
 
-    public String getAuthToken() {
-        return this.authToken;
+    public Secret getSecretAuthToken() {
+        return this.secretAuthToken;
     }
 }

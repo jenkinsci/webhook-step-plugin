@@ -3,6 +3,8 @@ package org.jenkinsci.plugins.webhookstep;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
 import hudson.util.FormValidation;
+import hudson.util.Secret;
+
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
@@ -27,12 +29,12 @@ public class RegisterWebhookStep extends Step {
     String token; 
 
     // authToken is the secret associated with the webHook
-    private String authToken;
+    private Secret secretAuthToken;
 
     @DataBoundConstructor
     public RegisterWebhookStep() {
         this.token = null;
-        this.authToken = null;
+        this.secretAuthToken = null;
     }
 
     public String getToken() {
@@ -46,7 +48,8 @@ public class RegisterWebhookStep extends Step {
 
     @DataBoundSetter
     public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+        //Encrypt the clear text 
+        this.secretAuthToken = Secret.fromString(authToken);
     }
 
     public FormValidation doCheckToken(@QueryParameter String value) {
@@ -65,7 +68,7 @@ public class RegisterWebhookStep extends Step {
 
     @Override
     public StepExecution start(StepContext context) {
-        return new RegisterWebhookExecution(this, context, this.authToken);
+        return new RegisterWebhookExecution(this, context, this.secretAuthToken);
     }
 
 

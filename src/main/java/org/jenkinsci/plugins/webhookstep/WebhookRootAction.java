@@ -15,6 +15,8 @@ import org.kohsuke.stapler.StaplerResponse;
 import hudson.Extension;
 import hudson.model.UnprotectedRootAction;
 import hudson.security.csrf.CrumbExclusion;
+import hudson.util.Secret;
+
 import org.kohsuke.stapler.verb.POST;
 
 import java.io.BufferedReader;
@@ -27,7 +29,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
     private static final HashMap<String, WaitForWebhookExecution> webhooks = new HashMap<>();
     private static final HashMap<String, WebhookResponse> alreadyPosted = new HashMap<>();
-    private static final HashMap<String, String> authTokens = new HashMap<>();
+    private static final HashMap<String, Secret> authTokens = new HashMap<>();
 
     @Override
     public String getDisplayName() {
@@ -48,14 +50,15 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
     public void doDynamic(StaplerRequest request, StaplerResponse response) {
         String token = request.getOriginalRestOfPath().substring(1); //Strip leading slash
         String authHeader = request.getHeader("Authorization");
-        String authToken;
+        Secret secretAuthToken;
 
         synchronized (authTokens) {
-            authToken = authTokens.get(token);
+            secretAuthToken = authTokens.get(token);
         }
 
-        if (authToken != null) {
-            if (!authToken.equals(authHeader)) {
+        if (secretAuthToken != null) {
+            //Decrypt the stored AuthToken with the one received in the header
+            if (!Secret.toString(secretAuthToken).equals(authHeader)) {
                 response.setHeader("Result", "Unauthorized");
                 response.setStatus(403);
                 return;
@@ -115,7 +118,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
     public static void registerAuthToken(WebhookToken hook) {
         synchronized (authTokens) {
-            authTokens.put(hook.getToken(), hook.getAuthToken());
+            authTokens.put(hook.getToken(), hook.getSecretAuthToken());
         }
     }
 
