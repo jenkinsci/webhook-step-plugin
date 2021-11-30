@@ -70,6 +70,6 @@ This token has to be provided in the header of the webhook HTTP POST for the wai
 To avoid secret leakage in the pipeline source code or logfiles, it is strongly advised to use a "secret text" credential. 
 The [declarative_withAuthToken](examples/declarative_withAuthToken) example illustrates how to use a webhook step authentication token stored as a secret (`webhook_secret`).
 
-To tigger that webhook, the CURL command would look like: `curl -X POST -d 'OK' -H "Authorization: 123" https://localhost:8080/webhook-step/test-webhook`
+To trigger that webhook, the `curl` command would look like: `curl -X POST -d 'OK' -H "Authorization: 123" <JENKINS_URL>/webhook-step/test-webhook`
 
 
