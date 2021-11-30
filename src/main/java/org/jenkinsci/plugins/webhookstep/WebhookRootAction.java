@@ -58,7 +58,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
         if (secretAuthToken != null) {
             //Decrypt the stored AuthToken with the one received in the header
-            if (!Secret.toString(secretAuthToken).equals(authHeader)) {
+            if (!secretAuthToken.getPlainText().equals(authHeader)) {
                 response.setHeader("Result", "Unauthorized");
                 response.setStatus(403);
                 return;
