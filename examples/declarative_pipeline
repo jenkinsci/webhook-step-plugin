@@ -18,9 +18,10 @@ pipeline {
                     
                     // Call a remote system to start execution, passing the callback url
                     //sh "curl -X POST -H 'Content-Type: application/json' -d '{\"callback\":\"${callbackURL}"}' http://httpbin.org/post"
-                    echo "Waiting for POST to ${callbackURL}"
 
+                    echo "Waiting for POST to ${callbackURL}"
                     data = waitForWebhook hook
+                    
                     echo "Webhook called with data: ${data}"
                 }
             }

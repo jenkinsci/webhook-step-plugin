@@ -4,19 +4,28 @@ import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 
+import hudson.util.Secret;
+
 import javax.inject.Inject;
 import java.net.URLEncoder;
 
 public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookToken> {
 
     private static final long serialVersionUID = -6718328636399912927L;
+    private final Secret secretAuthToken;
+
 
     @Inject
     private transient RegisterWebhookStep step;
 
-    public RegisterWebhookExecution(RegisterWebhookStep step, StepContext context) {
+    public RegisterWebhookExecution(RegisterWebhookStep step, StepContext context, Secret secretAuthToken) {
         super(context);
         this.step = step;
+        this.secretAuthToken = secretAuthToken;
+    }
+
+    public Secret getSecretAuthToken() {
+        return this.secretAuthToken;
     }
 
     @Override
@@ -32,6 +41,9 @@ public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookTo
         java.net.URI relative = new java.net.URI("webhook-step/" + token);
         java.net.URI path = baseUri.resolve(relative);
 
-        return new WebhookToken(token, path.toString());
+        WebhookToken hook = new WebhookToken(
+            token, path.toString(), this.secretAuthToken);
+        WebhookRootAction.registerAuthToken(hook);
+        return hook;
     }
 }
