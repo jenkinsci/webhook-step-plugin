@@ -5,7 +5,7 @@ This pipeline plugin provides an easy way to block a build pipeline until an
 external system posts to a webhook. 
 It can be used to integrate long running tasks into a pipeline, without busy waiting. 
 
-A typical example is lauching a performance test on a dedicated hardware/configuration. 
+A typical example is launching a performance test on a dedicated hardware/configuration. 
 When the task completes, it can easily notify the waiting pipeline. 
 The webhook payload can be used to provide information like results or other useful data.
 
@@ -64,7 +64,7 @@ The [declarative pipeline example](examples/declarative_pipeline) illustrates th
 
 Securing the webhook with an authentication token
 -------------------------------------------------
-It is possible to specify a authentication token. 
+It is possible to specify an authentication token. 
 This token has to be provided in the header of the webhook HTTP POST for the wait to complete.
 
 To avoid secret leakage in the pipeline source code or logfiles, it is strongly advised to use a "secret text" credential. 
