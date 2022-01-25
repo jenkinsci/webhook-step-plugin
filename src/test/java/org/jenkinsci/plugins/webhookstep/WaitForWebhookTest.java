@@ -41,11 +41,10 @@ public class WaitForWebhookTest {
     public void testCreateSimpleWebhook() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook()" + "\n");
-        pipelineCode.append("echo \"hookurl=${hook.getURL()}\"" + "\n");
+        String pipelineCode = "def hook = registerWebhook()\n" +
+                "echo \"hookurl=${hook.getURL()}\"\n";
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun b = p.scheduleBuild2(0).waitForStart();
 
         j.waitForCompletion(b);
@@ -57,11 +56,10 @@ public class WaitForWebhookTest {
     public void testUseCustomToken() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"test-token\") \n");
-        pipelineCode.append("echo \"token=${hook.token}\" \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"test-token\") \n" +
+                "echo \"token=${hook.token}\" \n";
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun b = p.scheduleBuild2(0).waitForStart();
 
         j.waitForCompletion(b);
@@ -77,18 +75,17 @@ public class WaitForWebhookTest {
         //build a webhook name that is unique for this test
         String webHook_ID = "test-token_" + name.getMethodName();
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n");
-        pipelineCode.append("echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("def data = waitForWebhook(webhookToken: hook)  \n");
-        pipelineCode.append("echo \"${data}\"  \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n" +
+                "echo \"token=${hook.token}\"  \n" +
+                "def data = waitForWebhook(webhookToken: hook)  \n" +
+                "echo \"${data}\"  \n";
 
 
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
         //Tokens with the same custom token tend to overwrite themselves and give a 202 return instead of 200. Non deterministic behavior warning.
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -117,15 +114,14 @@ public class WaitForWebhookTest {
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n");
-        pipelineCode.append("echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("def data = waitForWebhook(webhookToken: hook, withHeaders: true)  \n");
-        pipelineCode.append("echo \"${data.content}\"  \n");
-        pipelineCode.append("echo \"${data.headers.size()}\"  \n");
-        pipelineCode.append("for(k in data.headers.keySet()) {  echo \"${k} -> ${data.headers[k]}\"}  \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n" +
+                "echo \"token=${hook.token}\"  \n" +
+                "def data = waitForWebhook(webhookToken: hook, withHeaders: true)  \n" +
+                "echo \"${data.content}\"  \n" +
+                "echo \"${data.headers.size()}\"  \n" +
+                "for(k in data.headers.keySet()) {  echo \"${k} -> ${data.headers[k]}\"}  \n";
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -150,18 +146,17 @@ public class WaitForWebhookTest {
 
         //build a webhook name that is unique for this test
         String webHook_ID = "test-token_" + name.getMethodName();     
-        String testAuthToken = "123";  
+        String testAuthToken = "123";
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n");
-        pipelineCode.append("echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("def data = waitForWebhook(webhookToken: hook)  \n");
-        pipelineCode.append("echo \"${data}\"  \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n" +
+                "echo \"token=${hook.token}\"  \n" +
+                "def data = waitForWebhook(webhookToken: hook)  \n" +
+                "echo \"${data}\"  \n";
 
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -190,18 +185,17 @@ public class WaitForWebhookTest {
         //build a webhook name that is unique for this test
         String webHook_ID = "test-token_" + name.getMethodName();      
 
-        String testAuthToken = "123";  
+        String testAuthToken = "123";
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n");
-        pipelineCode.append("echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("def data = waitForWebhook(webhookToken: hook)  \n");
-        pipelineCode.append("echo \"${data}\"  \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n" +
+                "echo \"token=${hook.token}\"  \n" +
+                "def data = waitForWebhook(webhookToken: hook)  \n" +
+                "echo \"${data}\"  \n";
 
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -227,18 +221,17 @@ public class WaitForWebhookTest {
         //build a webhook name that is unique for this test
         String webHook_ID = "test-token_" + name.getMethodName();      
     
-        String testAuthToken = "123";  
+        String testAuthToken = "123";
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n");
-        pipelineCode.append("echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("def data = waitForWebhook(webhookToken: hook)  \n");
-        pipelineCode.append("echo \"${data}\"  \n");
+        String pipelineCode = "def hook = registerWebhook(token: \"" + webHook_ID + "\", authToken: \"" + testAuthToken + "\")  \n" +
+                "echo \"token=${hook.token}\"  \n" +
+                "def data = waitForWebhook(webhookToken: hook)  \n" +
+                "echo \"${data}\"  \n";
 
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
@@ -271,15 +264,14 @@ public class WaitForWebhookTest {
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
-        StringBuilder pipelineCode = new StringBuilder();
-        pipelineCode.append("node {  \n");
-        pipelineCode.append("   def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n");
-        pipelineCode.append("   echo \"token=${hook.token}\"  \n");
-        pipelineCode.append("   def data = waitForWebhook(hook)\n");
-        pipelineCode.append("   writeFile(file: 'large.json', text: data)\n");
-        pipelineCode.append("}  \n");
+        String pipelineCode = "node {  \n" +
+                "   def hook = registerWebhook(token: \"" + webHook_ID + "\")  \n" +
+                "   echo \"token=${hook.token}\"  \n" +
+                "   def data = waitForWebhook(hook)\n" +
+                "   writeFile(file: 'large.json', text: data)\n" +
+                "}  \n";
 
-        p.setDefinition(new CpsFlowDefinition(pipelineCode.toString(), true));
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
         WorkflowRun r = p.scheduleBuild2(0).waitForStart();
 
         j.assertBuildStatus(null, r);
