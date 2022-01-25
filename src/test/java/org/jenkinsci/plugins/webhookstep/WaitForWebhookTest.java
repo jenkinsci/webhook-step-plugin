@@ -324,7 +324,7 @@ public class WaitForWebhookTest {
      * @param content the json payload
      * @return the webResponse from the webhook
      */
-    public WebResponse trigger_webhook(String webhook_path, String content) throws MalformedURLException, IOException{
+    public WebResponse trigger_webhook(String webhook_path, String content) throws IOException{
         JenkinsRule.WebClient wc = j.createWebClient();
         URL URLtoCall = new URL(j.getURL(), webhook_path);
         wc.addRequestHeader("content-type", "application/json");
@@ -340,7 +340,7 @@ public class WaitForWebhookTest {
      * @param authToken the authentication token
      * @return the webResponse from the webhook
      */
-    public WebResponse trigger_authenticated_webhook(String webhook_path, String content, String authToken) throws MalformedURLException, IOException{
+    public WebResponse trigger_authenticated_webhook(String webhook_path, String content, String authToken) throws IOException{
         JenkinsRule.WebClient wc = j.createWebClient();
         URL URLtoCall = new URL(j.getURL(), webhook_path);
         wc.addRequestHeader("content-type", "application/json");
