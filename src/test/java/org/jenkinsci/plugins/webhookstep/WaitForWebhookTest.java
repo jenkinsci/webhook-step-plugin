@@ -15,7 +15,6 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -27,6 +26,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static net.javacrumbs.jsonunit.JsonAssert.when;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class WaitForWebhookTest {
@@ -167,17 +167,9 @@ public class WaitForWebhookTest {
         j.assertBuildStatus(null, r);
 
         //Use a WebClient to send a json file to trigger the webhook
-        try {
-            trigger_webhook("webhook-step/" + webHook_ID, content);
-        } catch(Exception ex) {
-            if(ex.getClass() == FailingHttpStatusCodeException.class) {
-                FailingHttpStatusCodeException httpException = (FailingHttpStatusCodeException) ex;
-                assertThat("Triggering the webhook with wrong authentication should fail", httpException.getStatusCode(), Matchers.is(403));
-            } 
-            else {
-                assertTrue("Unexpected exception occurred.", false);
-            }
-        }
+        final FailingHttpStatusCodeException ex = assertThrows(FailingHttpStatusCodeException.class,
+                () -> trigger_webhook("webhook-step/" + webHook_ID, content));
+        assertThat("Triggering the webhook with wrong authentication should fail", ex.getStatusCode(), Matchers.is(403));
 
         //try again but with the correct webhook
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, testAuthToken);
@@ -253,17 +245,9 @@ public class WaitForWebhookTest {
 
         
         //Use a WebClient to send a json file to trigger the webhook with a wrong password
-        try {
-            trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "badAuthToken");
-        } catch(Exception ex) {
-            if(ex.getClass() == FailingHttpStatusCodeException.class) {
-                FailingHttpStatusCodeException httpException = (FailingHttpStatusCodeException) ex;
-                assertThat("Triggering the webhook with wrong authentication should return a HTTP forbidden error", httpException.getStatusCode(), Matchers.is(403));
-            } 
-            else {
-                assertTrue("Unexpected exception occurred.", false);
-            }
-        }
+        final FailingHttpStatusCodeException ex = assertThrows(FailingHttpStatusCodeException.class,
+                () -> trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "badAuthToken"));
+        assertThat("Triggering the webhook with wrong authentication should return a HTTP forbidden error", ex.getStatusCode(), Matchers.is(403));
 
         //try again but with the correct webhook
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "123");
