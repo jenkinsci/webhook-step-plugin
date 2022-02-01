@@ -93,7 +93,7 @@ public class WaitForWebhookTest {
 
         j.assertBuildStatus(null, r);
 
-        //Use a WebCLient to send a json file to trigger the webhook
+        //Use a WebClient to send a json file to trigger the webhook
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
         
         // TODO: why do I have sometimes a code 202 instead of the expected 200
@@ -130,7 +130,7 @@ public class WaitForWebhookTest {
 
         j.assertBuildStatus(null, r);
 
-        //Use a WebCLient to send a json file to trigger the webhook
+        //Use a WebClient to send a json file to trigger the webhook
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200
@@ -175,7 +175,7 @@ public class WaitForWebhookTest {
                 assertThat("Triggering the webhook with wrong authentication should fail", httpException.getStatusCode(), Matchers.is(403));
             } 
             else {
-                assertTrue("Unexpected exception occured.", false);
+                assertTrue("Unexpected exception occurred.", false);
             }
         }
 
@@ -214,7 +214,7 @@ public class WaitForWebhookTest {
 
         j.assertBuildStatus(null, r);
 
-        //Use a WebCLient to send a json file to trigger the webhook
+        //Use a WebClient to send a json file to trigger the webhook
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, testAuthToken);
         
         // TODO: why do I have sometimes a code 202 instead of the expected 200
@@ -252,7 +252,7 @@ public class WaitForWebhookTest {
         j.assertBuildStatus(null, r);
 
         
-        //Use a WebCLient to send a json file to trigger the webhook with a wrong password
+        //Use a WebClient to send a json file to trigger the webhook with a wrong password
         try {
             trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "badAuthToken");
         } catch(Exception ex) {
@@ -261,7 +261,7 @@ public class WaitForWebhookTest {
                 assertThat("Triggering the webhook with wrong authentication should return a HTTP forbidden error", httpException.getStatusCode(), Matchers.is(403));
             } 
             else {
-                assertTrue("Unexpected exception occured.", false);
+                assertTrue("Unexpected exception occurred.", false);
             }
         }
 
@@ -300,7 +300,7 @@ public class WaitForWebhookTest {
 
         j.assertBuildStatus(null, r);
 
-        //Use a WebCLient to send a json file to trigger the webhook
+        //Use a WebClient to send a json file to trigger the webhook
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200        
@@ -337,7 +337,7 @@ public class WaitForWebhookTest {
      * Sends a json file to the specified url to trigger the webhook
      * @param webhook_path the path to the webhook
      * @param content the json payload
-     * @param authToken the autentication token
+     * @param authToken the authentication token
      * @return the webResponse from the webhook
      */
     public WebResponse trigger_authenticated_webhook(String webhook_path, String content, String authToken) throws MalformedURLException, IOException{
