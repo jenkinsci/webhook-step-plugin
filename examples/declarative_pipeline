@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     hook = registerWebhook()
-                    callbackURL = hook.getURL()
+                    callbackURL = hook.url
                     
                     // Call a remote system to start execution, passing the callback url
                     //sh "curl -X POST -H 'Content-Type: application/json' -d '{\"callback\":\"${callbackURL}"}' http://httpbin.org/post"

@@ -53,6 +53,29 @@ public class WaitForWebhookTest {
     }
 
     @Test
+    public void testWebhookDataAccess() throws Exception {
+        WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
+
+        String pipelineCode = "def hook = registerWebhook()\n" +
+                "echo \"token_long=${hook.getToken()}\"\n" +
+                "echo \"token_short=${hook.token}\"\n" +
+                "echo \"url_long=${hook.getURL()}\"\n" +
+                "echo \"url_long2=${hook.getUrl()}\"\n" +
+                "echo \"url_short=${hook.url}\"\n";
+
+        p.setDefinition(new CpsFlowDefinition(pipelineCode, true));
+        WorkflowRun b = p.scheduleBuild2(0).waitForStart();
+
+        j.waitForCompletion(b);
+        j.assertBuildStatus(Result.SUCCESS, b);
+        j.assertLogContains("token_long=", b);
+        j.assertLogContains("token_short=", b);
+        j.assertLogContains("url_long=", b);
+        j.assertLogContains("url_long2=", b);
+        j.assertLogContains("url_short=", b);
+    }
+
+    @Test
     public void testUseCustomToken() throws Exception {
         WorkflowJob p = j.jenkins.createProject(WorkflowJob.class, "prj");
 

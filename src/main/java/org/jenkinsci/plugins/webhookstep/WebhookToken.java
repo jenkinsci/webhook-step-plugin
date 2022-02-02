@@ -26,6 +26,11 @@ public class WebhookToken implements Serializable {
 
     @Whitelisted
     public String getURL() {
+        return getUrl();
+    }
+
+    @Whitelisted
+    public String getUrl() {
         return url;
     }
 
