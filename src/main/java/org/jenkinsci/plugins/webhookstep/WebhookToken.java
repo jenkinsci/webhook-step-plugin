@@ -24,6 +24,10 @@ public class WebhookToken implements Serializable {
         return token;
     }
 
+    /**
+     * @deprecated Use {@link #getUrl()} instead.
+     */
+    @Deprecated
     @Whitelisted
     public String getURL() {
         return getUrl();
