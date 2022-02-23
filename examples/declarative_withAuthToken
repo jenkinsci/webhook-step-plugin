@@ -16,7 +16,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'webhook_secret', variable: 'SECRET')]) { 
 
                         hook = registerWebhook(token: 'test-webhook', authToken: SECRET)
-                        callbackURL = hook.getURL()
+                        callbackURL = hook.url
                         sh "echo ${callbackURL}"
 
 

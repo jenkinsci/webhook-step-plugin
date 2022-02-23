@@ -28,7 +28,7 @@ and waits for a user to call it:
 ```
 hook = registerWebhook()
 
-echo "Waiting for POST to ${hook.getURL()}"
+echo "Waiting for POST to ${hook.url}"
 
 data = waitForWebhook hook
 echo "Webhook called with data: ${data}"
