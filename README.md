@@ -50,6 +50,18 @@ The log file will thus show `Webhook called with data: OK`.
 
 For illustration, see the [scripted pipeline example](examples/scripted_pipeline).
 
+
+Accessing hook data
+-------------------
+
+- **Token:** `hook.token` / `hook.getToken()`
+- **Url:** `hook.url` / `hook.getUrl()`
+
+###### Deprecation notice:
+
+`getURL()` is *deprecated* and will be removed in a future release.
+
+
 Specifying a fixed webhook name
 -------------------------------
 
