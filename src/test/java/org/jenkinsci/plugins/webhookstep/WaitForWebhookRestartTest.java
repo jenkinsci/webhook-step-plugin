@@ -62,4 +62,88 @@ public class WaitForWebhookRestartTest {
             rr.assertLogContains("\"action\":\"done\"", run);
         });
     }
+
+    @Test
+    public void testSuspendAfterWebhookResponse() throws Exception {
+        URL url = this.getClass().getResource("/simple.json");
+
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
+
+        rr.then(rr -> {
+            WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
+            p.setDefinition(new CpsFlowDefinition(
+                    "node {\n" +
+                            "  def hook = registerWebhook(token: \"test-token\")\n" +
+                            "  echo \"token=${hook.token}\"\n" +
+                            "  def data = waitForWebhook(hook)\n" +
+                            "  semaphore 'complete'\n" +
+                            "  echo \"${data}\"" +
+                            "}", true));
+
+            WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
+
+            rr.postJSON("webhook-step/test-token", content);
+
+            SemaphoreStep.waitForStart("complete/1", b);
+            assertTrue(JenkinsRule.getLog(b), b.isBuilding());
+        });
+
+        rr.then(rr -> {
+            WorkflowJob job = rr.jenkins.getItemByFullName("prj", WorkflowJob.class);
+            assertNotNull(job);
+            WorkflowRun run = job.getBuildByNumber(1);
+            assertNotNull(run);
+
+            SemaphoreStep.success("complete/1", null);
+
+            rr.waitForCompletion(run);
+            rr.assertBuildStatus(Result.SUCCESS, run);
+            rr.assertLogContains("token=test-token", run);
+            rr.assertLogContains("\"action\":\"done\"", run);
+        });
+    }
+
+    @Test
+    public void testSuspendAfterWebhookResponseWithHeaders() throws Exception {
+        URL url = this.getClass().getResource("/simple.json");
+
+
+        FilePath contentFilePath = new FilePath(new File(url.getFile()));
+        String content = contentFilePath.readToString();
+
+        rr.then(rr -> {
+            WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
+            p.setDefinition(new CpsFlowDefinition(
+                    "node {\n" +
+                            "  def hook = registerWebhook(token: \"test-token\")\n" +
+                            "  echo \"token=${hook.token}\"\n" +
+                            "  def response = waitForWebhook(webhookToken: hook, withHeaders: true)\n" +
+                            "  semaphore 'complete'\n" +
+                            "  echo \"${response.content}\"" +
+                            "}", true));
+
+            WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
+
+            rr.postJSON("webhook-step/test-token", content);
+
+            SemaphoreStep.waitForStart("complete/1", b);
+            assertTrue(JenkinsRule.getLog(b), b.isBuilding());
+        });
+
+        rr.then(rr -> {
+            WorkflowJob job = rr.jenkins.getItemByFullName("prj", WorkflowJob.class);
+            assertNotNull(job);
+            WorkflowRun run = job.getBuildByNumber(1);
+            assertNotNull(run);
+
+            SemaphoreStep.success("complete/1", null);
+
+            rr.waitForCompletion(run);
+            rr.assertBuildStatus(Result.SUCCESS, run);
+            rr.assertLogContains("token=test-token", run);
+            rr.assertLogContains("\"action\":\"done\"", run);
+        });
+    }
 }
