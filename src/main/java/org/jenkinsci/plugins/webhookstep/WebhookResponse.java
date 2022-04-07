@@ -1,10 +1,14 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import java.io.Serializable;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 
 import java.util.Map;
 
-public class WebhookResponse {
+public class WebhookResponse implements Serializable {
+
+    private static final long serialVersionUID = 1;
+
     private final String content;
     private final Map<String, String> headers;
 
