@@ -17,7 +17,6 @@
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
     <jenkins.version>2.289.1</jenkins.version>
-    <java.level>8</java.level>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
   </properties>
 
