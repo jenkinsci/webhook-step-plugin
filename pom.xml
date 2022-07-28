@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.43.1</version>
+    <version>4.44</version>
     <relativePath />
   </parent>
 
@@ -16,7 +16,7 @@
   <properties>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
-    <jenkins.version>2.289.1</jenkins.version>
+    <jenkins.version>2.319.1</jenkins.version>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
   </properties>
 
@@ -68,8 +68,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.289.x</artifactId>
-        <version>1500.ve4d05cd32975</version>
+        <artifactId>bom-2.319.x</artifactId>
+        <version>1508.v4b_d09ff0e893</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
