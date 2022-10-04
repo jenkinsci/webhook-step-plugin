@@ -1,0 +1,1 @@
+This file is created to validate the hacktoberfest statistics
