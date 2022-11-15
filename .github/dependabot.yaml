@@ -9,7 +9,7 @@ updates:
   reviewers:
   - jmMeessen
   labels:
-  - skip-changelog
+  - dependencies
 - package-ecosystem: github-actions
   directory: /
   schedule:
