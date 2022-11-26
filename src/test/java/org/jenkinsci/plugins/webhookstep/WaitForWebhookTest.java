@@ -4,6 +4,7 @@ import hudson.FilePath;
 import hudson.model.Result;
 
 import org.hamcrest.Matchers;
+import org.hamcrest.core.AnyOf;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -117,7 +118,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
         
         // TODO: why do I have sometimes a code 202 instead of the expected 200
-        //assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), isSuccessful());
 
         //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -153,7 +154,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200
-        //assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), isSuccessful());
 
         //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -193,7 +194,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, testAuthToken);
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200        
-        //assertThat("Triggering the webhook return a HTTP OK.", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook return a HTTP OK.", webResponse.getStatusCode(), isSuccessful());
 
         // //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -227,7 +228,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, testAuthToken);
         
         // TODO: why do I have sometimes a code 202 instead of the expected 200
-        //assertThat("Triggering the webhook without authentication should fail", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook without authentication should fail", webResponse.getStatusCode(), isSuccessful());
 
         //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -269,7 +270,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "123");
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200
-        //assertThat("Triggering the webhook return a HTTP OK.", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook return a HTTP OK.", webResponse.getStatusCode(), isSuccessful());
 
         // //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -303,7 +304,7 @@ public class WaitForWebhookTest {
         WebResponse webResponse = trigger_webhook("webhook-step/" + webHook_ID, content);
 
         // TODO: why do I have sometimes a code 202 instead of the expected 200        
-        //assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), Matchers.is(200));
+        assertThat("Triggering the webhook should succeed", webResponse.getStatusCode(), isSuccessful());
 
         //wait for the pipeline to continue
         j.waitForCompletion(r);
@@ -332,7 +333,7 @@ public class WaitForWebhookTest {
         return(wc.getPage(webRequest).getWebResponse());
     }
 
-        /**
+    /**
      * Sends a json file to the specified url to trigger the webhook
      * @param webhook_path the path to the webhook
      * @param content the json payload
@@ -347,5 +348,9 @@ public class WaitForWebhookTest {
         WebRequest webRequest = new WebRequest(URLtoCall, HttpMethod.POST);
         webRequest.setRequestBody(content);
         return(wc.getPage(webRequest).getWebResponse());
+    }
+
+    private AnyOf<Integer> isSuccessful() {
+        return Matchers.anyOf(Matchers.is(200), Matchers.is(202));
     }
 }
