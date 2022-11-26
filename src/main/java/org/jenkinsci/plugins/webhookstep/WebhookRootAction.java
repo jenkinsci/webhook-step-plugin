@@ -95,7 +95,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
         WebhookResponse whResponse = new WebhookResponse(content.toString(), headers);
 
         Logger.getLogger(WebhookRootAction.class.getName())
-                .info("Webhook called with " + token);
+                .fine("Webhook called with " + token);
 
         WaitForWebhookExecution exec;
         synchronized (webhooks) {
@@ -125,7 +125,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
     //Returns null when the webhook has been registered, the content when the webhook has already been called
     public static WebhookResponse registerWebhook(WaitForWebhookExecution exec) {
         Logger.getLogger(WebhookRootAction.class.getName())
-                .info("Registering webhook with token " + exec.getToken());
+                .fine("Registering webhook with token " + exec.getToken());
         synchronized (webhooks) {
             if (alreadyPosted.containsKey(exec.getToken())) {
                 return alreadyPosted.remove(exec.getToken());
@@ -138,7 +138,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
 
     public static void deregisterWebhook(WaitForWebhookExecution exec) {
         Logger.getLogger(WebhookRootAction.class.getName())
-                .info("Deregistering webhook with token " + exec.getToken());
+                .fine("Deregistering webhook with token " + exec.getToken());
         synchronized (webhooks) {
             webhooks.remove(exec.getToken());
         }
