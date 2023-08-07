@@ -10,6 +10,11 @@ updates:
   - jmMeessen
   labels:
   - dependencies
+  ignore:
+  # from version 3, json-unit dropped support for java 11
+  - dependency-name: "net.javacrumbs.json-unit:json-unit"
+    versions: [">=3.0.0"]
+
 - package-ecosystem: github-actions
   directory: /
   schedule:
