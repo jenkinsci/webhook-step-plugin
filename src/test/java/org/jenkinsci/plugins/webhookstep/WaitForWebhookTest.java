@@ -1,10 +1,22 @@
 package org.jenkinsci.plugins.webhookstep;
 
-import hudson.FilePath;
-import hudson.model.Result;
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
+import static net.javacrumbs.jsonunit.JsonAssert.when;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 import org.hamcrest.Matchers;
 import org.hamcrest.core.AnyOf;
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.HttpMethod;
+import org.htmlunit.WebRequest;
+import org.htmlunit.WebResponse;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -13,22 +25,8 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.jvnet.hudson.test.JenkinsRule;
 
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import org.htmlunit.FailingHttpStatusCodeException;
-import org.htmlunit.HttpMethod;
-import org.htmlunit.WebRequest;
-import org.htmlunit.WebResponse;
-
-import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
-import static net.javacrumbs.jsonunit.JsonAssert.when;
-import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import hudson.FilePath;
+import hudson.model.Result;
 
 public class WaitForWebhookTest {
 
@@ -188,6 +186,8 @@ public class WaitForWebhookTest {
         //Use a WebClient to send a json file to trigger the webhook
         final FailingHttpStatusCodeException ex = assertThrows(FailingHttpStatusCodeException.class,
                 () -> trigger_webhook("webhook-step/" + webHook_ID, content));
+       
+        // TODO: in certain cases, this assert fails with "expected org.htmlunit.FailingHttpStatusCodeException to be thrown, but nothing was thrown"
         assertThat("Triggering the webhook with wrong authentication should fail", ex.getStatusCode(), Matchers.is(403));
 
         //try again but with the correct webhook
@@ -264,6 +264,7 @@ public class WaitForWebhookTest {
         //Use a WebClient to send a json file to trigger the webhook with a wrong password
         final FailingHttpStatusCodeException ex = assertThrows(FailingHttpStatusCodeException.class,
                 () -> trigger_authenticated_webhook("webhook-step/" + webHook_ID, content, "badAuthToken"));
+        //TODO: in certain cases, this assert fails with "expected org.htmlunit.FailingHttpStatusCodeException to be thrown, but nothing was thrown"
         assertThat("Triggering the webhook with wrong authentication should return a HTTP forbidden error", ex.getStatusCode(), Matchers.is(403));
 
         //try again but with the correct webhook
