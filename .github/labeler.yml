@@ -1,12 +1,14 @@
 chore:
-- .github/**/*
-- .gitignore
-- .mvn/*
-- .settings/*
-- .gitpod.yml
-- Jenkinsfile
+- changed-files:
+  - .github/**/*
+  - .gitignore
+  - .mvn/*
+  - .settings/*
+  - .gitpod.yml
+  - Jenkinsfile
 
 documentation:
-- CHANGELOG.md
-- CONTRIBUTING.md
-- README.md
+- changed-files:
+  - CHANGELOG.md
+  - CONTRIBUTING.md
+  - README.md
