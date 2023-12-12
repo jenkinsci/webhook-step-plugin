@@ -24,7 +24,7 @@ public class WaitForWebhookExecution extends AbstractStepExecutionImpl {
         WebhookResponse response = WebhookRootAction.registerWebhook(this);
 
         if (response != null) {
-            if(step.isWithHeaders()) {
+            if (step.isWithHeaders()) {
                 getContext().onSuccess(response);
             } else {
                 getContext().onSuccess(response.getContent());
@@ -48,11 +48,10 @@ public class WaitForWebhookExecution extends AbstractStepExecutionImpl {
     }
 
     public void onTriggered(WebhookResponse response) {
-        if(step.isWithHeaders()) {
+        if (step.isWithHeaders()) {
             getContext().onSuccess(response);
         } else {
             getContext().onSuccess(response.getContent());
         }
     }
-
 }

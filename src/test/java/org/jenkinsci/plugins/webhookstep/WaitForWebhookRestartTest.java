@@ -1,7 +1,12 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import hudson.FilePath;
 import hudson.model.Result;
+import java.io.File;
+import java.net.URL;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -10,12 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.RestartableJenkinsRule;
-
-import java.io.File;
-import java.net.URL;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class WaitForWebhookRestartTest {
 
@@ -26,27 +25,26 @@ public class WaitForWebhookRestartTest {
     public void testWaitHook() throws Exception {
         URL url = this.getClass().getResource("/simple.json");
 
-
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
-        
+
         rr.then(rr -> {
             WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
             p.setDefinition(new CpsFlowDefinition(
-                    "node {\n" +
-                            "  def hook = registerWebhook(token: \"test-token\")\n" +
-                            "  echo \"token=${hook.token}\"\n" +
-                            "  semaphore 'started'\n" +
-                            "  def data = waitForWebhook(hook)\n" +
-                            "  echo \"${data}\"" +
-                            "}", true));
+                    "node {\n" + "  def hook = registerWebhook(token: \"test-token\")\n"
+                            + "  echo \"token=${hook.token}\"\n"
+                            + "  semaphore 'started'\n"
+                            + "  def data = waitForWebhook(hook)\n"
+                            + "  echo \"${data}\""
+                            + "}",
+                    true));
 
             WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
             SemaphoreStep.waitForStart("started/1", b);
             assertTrue(JenkinsRule.getLog(b), b.isBuilding());
         });
 
-        rr.then(rr -> {    
+        rr.then(rr -> {
             WorkflowJob job = rr.jenkins.getItemByFullName("prj", WorkflowJob.class);
             assertNotNull(job);
             WorkflowRun run = job.getBuildByNumber(1);
@@ -67,20 +65,19 @@ public class WaitForWebhookRestartTest {
     public void testSuspendAfterWebhookResponse() throws Exception {
         URL url = this.getClass().getResource("/simple.json");
 
-
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
         rr.then(rr -> {
             WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
             p.setDefinition(new CpsFlowDefinition(
-                    "node {\n" +
-                            "  def hook = registerWebhook(token: \"test-token\")\n" +
-                            "  echo \"token=${hook.token}\"\n" +
-                            "  def data = waitForWebhook(hook)\n" +
-                            "  semaphore 'complete'\n" +
-                            "  echo \"${data}\"" +
-                            "}", true));
+                    "node {\n" + "  def hook = registerWebhook(token: \"test-token\")\n"
+                            + "  echo \"token=${hook.token}\"\n"
+                            + "  def data = waitForWebhook(hook)\n"
+                            + "  semaphore 'complete'\n"
+                            + "  echo \"${data}\""
+                            + "}",
+                    true));
 
             WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
 
@@ -109,20 +106,19 @@ public class WaitForWebhookRestartTest {
     public void testSuspendAfterWebhookResponseWithHeaders() throws Exception {
         URL url = this.getClass().getResource("/simple.json");
 
-
         FilePath contentFilePath = new FilePath(new File(url.getFile()));
         String content = contentFilePath.readToString();
 
         rr.then(rr -> {
             WorkflowJob p = rr.jenkins.createProject(WorkflowJob.class, "prj");
             p.setDefinition(new CpsFlowDefinition(
-                    "node {\n" +
-                            "  def hook = registerWebhook(token: \"test-token\")\n" +
-                            "  echo \"token=${hook.token}\"\n" +
-                            "  def response = waitForWebhook(webhookToken: hook, withHeaders: true)\n" +
-                            "  semaphore 'complete'\n" +
-                            "  echo \"${response.content}\"" +
-                            "}", true));
+                    "node {\n" + "  def hook = registerWebhook(token: \"test-token\")\n"
+                            + "  echo \"token=${hook.token}\"\n"
+                            + "  def response = waitForWebhook(webhookToken: hook, withHeaders: true)\n"
+                            + "  semaphore 'complete'\n"
+                            + "  echo \"${response.content}\""
+                            + "}",
+                    true));
 
             WorkflowRun b = p.scheduleBuild2(0).getStartCondition().get();
 

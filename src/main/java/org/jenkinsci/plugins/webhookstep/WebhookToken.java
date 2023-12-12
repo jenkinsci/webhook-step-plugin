@@ -1,9 +1,8 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import hudson.util.Secret;
 import java.io.Serializable;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
-
-import hudson.util.Secret;
 
 public class WebhookToken implements Serializable {
 

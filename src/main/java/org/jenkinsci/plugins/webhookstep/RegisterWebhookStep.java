@@ -2,31 +2,28 @@ package org.jenkinsci.plugins.webhookstep;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
+import hudson.Extension;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
-
-import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.workflow.steps.Step;
-import org.jenkinsci.plugins.workflow.steps.StepContext;
-import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
-import org.jenkinsci.plugins.workflow.steps.StepExecution;
-import org.kohsuke.stapler.DataBoundConstructor;
-
-import hudson.Extension;
-import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.QueryParameter;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.plugins.workflow.steps.Step;
+import org.jenkinsci.plugins.workflow.steps.StepContext;
+import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
+import org.jenkinsci.plugins.workflow.steps.StepExecution;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.QueryParameter;
 
 public class RegisterWebhookStep extends Step {
 
     // Token identifies the webhook
-    String token; 
+    String token;
 
     // authToken is the secret associated with the webHook
     private Secret secretAuthToken;
@@ -48,7 +45,7 @@ public class RegisterWebhookStep extends Step {
 
     @DataBoundSetter
     public void setAuthToken(String authToken) {
-        //Encrypt the clear text 
+        // Encrypt the clear text
         this.secretAuthToken = Secret.fromString(authToken);
     }
 
@@ -58,10 +55,9 @@ public class RegisterWebhookStep extends Step {
                 return FormValidation.ok();
             }
         } catch (UnsupportedEncodingException e) {
-            Logger.getLogger(this.getClass().getName())
-                    .log(Level.FINE, String.format("bad token: %s", token), e);
-            return FormValidation.warning(String.format(
-                    "bad encoding for token [%s]: %s", token, e.getLocalizedMessage()));
+            Logger.getLogger(this.getClass().getName()).log(Level.FINE, String.format("bad token: %s", token), e);
+            return FormValidation.warning(
+                    String.format("bad encoding for token [%s]: %s", token, e.getLocalizedMessage()));
         }
         return FormValidation.warning(String.format("bad token [%s], it should be passed in urlencoded format", token));
     }
@@ -70,7 +66,6 @@ public class RegisterWebhookStep extends Step {
     public StepExecution start(StepContext context) {
         return new RegisterWebhookExecution(this, context, this.secretAuthToken);
     }
-
 
     @Extension
     public static class DescriptorImpl extends StepDescriptor {
