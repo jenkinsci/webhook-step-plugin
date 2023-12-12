@@ -1,11 +1,11 @@
-chore:
-- changed-files:
-  - any-glob-to-any-file: '.github/**/*'
-  - any-glob-to-any-file: '.gitignore'
-  - any-glob-to-any-file: '.mvn/*'
-  - any-glob-to-any-file: '.settings/*'
-  - any-glob-to-any-file: '.gitpod.yml'
-  - any-glob-to-any-file: 'Jenkinsfile'
+# chore:
+# - changed-files:
+#   - any-glob-to-any-file: '.github/**/*'
+#   - any-glob-to-any-file: '.gitignore'
+#   - any-glob-to-any-file: '.mvn/*'
+#   - any-glob-to-any-file: '.settings/*'
+#   - any-glob-to-any-file: '.gitpod.yml'
+#   - any-glob-to-any-file: 'Jenkinsfile'
 
 documentation:
 - changed-files:
