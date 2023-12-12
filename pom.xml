@@ -48,7 +48,6 @@
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
     <jenkins.version>2.414.3</jenkins.version>
-    <!-- <maven-plugin-tools.version>3.10.2</maven-plugin-tools.version> -->
     <spotless.check.skip>false</spotless.check.skip>
     <spotbugs.threshold>High</spotbugs.threshold>
   </properties>
