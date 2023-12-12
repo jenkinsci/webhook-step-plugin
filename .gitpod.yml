@@ -1,5 +1,5 @@
 tasks:
-  - name: Prepare Gitpod environement
+  - name: Prepare Gitpod environment
     before: |
       # Update settings.xml
       cp .mvn/gitpod-mvn-settings.xml ~/.m2/settings.xml
