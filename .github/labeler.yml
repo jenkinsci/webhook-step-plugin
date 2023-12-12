@@ -1,12 +1,14 @@
 chore:
-- .github/**/*
-- .gitignore
-- .mvn/*
-- .settings/*
-- .gitpod.yml
-- Jenkinsfile
+- changed-files:
+  - any-glob-to-any-file: '.github/**/*'
+  - any-glob-to-any-file: '.gitignore'
+  - any-glob-to-any-file: '.mvn/*'
+  - any-glob-to-any-file: '.settings/*'
+  - any-glob-to-any-file: '.gitpod.yml'
+  - any-glob-to-any-file: 'Jenkinsfile'
 
 documentation:
-- CHANGELOG.md
-- CONTRIBUTING.md
-- README.md
+- changed-files:
+  - any-glob-to-any-file: 'CHANGELOG.md'
+  - any-glob-to-any-file: 'CONTRIBUTING.md'
+  - any-glob-to-any-file: 'README.md'
