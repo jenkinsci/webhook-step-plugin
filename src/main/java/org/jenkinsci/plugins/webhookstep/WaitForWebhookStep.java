@@ -1,17 +1,15 @@
 package org.jenkinsci.plugins.webhookstep;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.Extension;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
 import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
-
-import hudson.Extension;
 import org.kohsuke.stapler.DataBoundSetter;
 
 public class WaitForWebhookStep extends Step implements Serializable {

@@ -1,9 +1,8 @@
 package org.jenkinsci.plugins.webhookstep;
 
 import java.io.Serializable;
-import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
-
 import java.util.Map;
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 
 public class WebhookResponse implements Serializable {
 
