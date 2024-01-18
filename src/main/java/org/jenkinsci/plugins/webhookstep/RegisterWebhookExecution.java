@@ -1,8 +1,8 @@
 package org.jenkinsci.plugins.webhookstep;
 
 import hudson.util.Secret;
+import jakarta.inject.Inject;
 import java.net.URLEncoder;
-import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
