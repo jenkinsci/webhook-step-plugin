@@ -5,12 +5,10 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
@@ -50,14 +48,8 @@ public class RegisterWebhookStep extends Step {
     }
 
     public FormValidation doCheckToken(@QueryParameter String value) {
-        try {
-            if (StringUtils.isEmpty(value) || token.equals(URLEncoder.encode(token, "UTF-8"))) {
-                return FormValidation.ok();
-            }
-        } catch (UnsupportedEncodingException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.FINE, String.format("bad token: %s", token), e);
-            return FormValidation.warning(
-                    String.format("bad encoding for token [%s]: %s", token, e.getLocalizedMessage()));
+        if (StringUtils.isEmpty(value) || token.equals(URLEncoder.encode(token, StandardCharsets.UTF_8))) {
+            return FormValidation.ok();
         }
         return FormValidation.warning(String.format("bad token [%s], it should be passed in urlencoded format", token));
     }
