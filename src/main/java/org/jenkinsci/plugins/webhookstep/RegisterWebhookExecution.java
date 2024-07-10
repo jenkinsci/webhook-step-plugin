@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.webhookstep;
 import hudson.util.Secret;
 import jakarta.inject.Inject;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
@@ -29,7 +30,7 @@ public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookTo
     public WebhookToken run() throws Exception {
         String token = (step == null || StringUtils.isEmpty(step.token))
                 ? java.util.UUID.randomUUID().toString()
-                : URLEncoder.encode(step.token, "UTF-8");
+                : URLEncoder.encode(step.token, StandardCharsets.UTF_8);
         String jenkinsUrl = getContext().get(hudson.EnvVars.class).get("JENKINS_URL");
         if (jenkinsUrl == null || jenkinsUrl.isEmpty()) {
             throw new RuntimeException("JENKINS_URL must be set in the Manage Jenkins console");
