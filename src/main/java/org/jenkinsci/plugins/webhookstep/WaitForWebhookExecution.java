@@ -1,11 +1,13 @@
 package org.jenkinsci.plugins.webhookstep;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.Serial;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepExecutionImpl;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 
 public class WaitForWebhookExecution extends AbstractStepExecutionImpl {
 
+    @Serial
     private static final long serialVersionUID = -148119134567863021L;
 
     WaitForWebhookStep step;
