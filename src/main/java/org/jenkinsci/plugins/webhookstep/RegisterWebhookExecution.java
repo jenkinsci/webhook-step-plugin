@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.webhookstep;
 
 import hudson.util.Secret;
 import jakarta.inject.Inject;
+import java.io.Serial;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +11,9 @@ import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 
 public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookToken> {
 
+    @Serial
     private static final long serialVersionUID = -6718328636399912927L;
+
     private final Secret secretAuthToken;
 
     @Inject
