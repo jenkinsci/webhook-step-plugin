@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.88</version>
+    <version>5.17</version>
     <relativePath />
   </parent>
 
@@ -24,19 +24,6 @@
     </license>
   </licenses>
 
-  <developers>
-    <developer>
-      <id>cpitman</id>
-      <name>Chris Pitman</name>
-      <email>cpitman1@gmail.com</email>
-    </developer>
-    <developer>
-      <id>jmMeessen</id>
-      <name>Jean-Marc Meessen</name>
-      <email>jean-marc@meessen-web.org</email>
-    </developer>
-  </developers>
-
   <scm>
     <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
     <developerConnection>scm:git:https://github.com/${gitHubRepo}.git</developerConnection>
@@ -48,7 +35,7 @@
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/webhook-step-plugin</gitHubRepo>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
-    <jenkins.baseline>2.426</jenkins.baseline>
+    <jenkins.baseline>2.492</jenkins.baseline>
     <jenkins.version>${jenkins.baseline}.3</jenkins.version>
     <spotless.check.skip>false</spotless.check.skip>
     <spotbugs.threshold>High</spotbugs.threshold>
@@ -59,7 +46,7 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-${jenkins.baseline}.x</artifactId>
-        <version>3208.vb_21177d4b_cd9</version>
+        <version>4740.v75a_90f6fefb_7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

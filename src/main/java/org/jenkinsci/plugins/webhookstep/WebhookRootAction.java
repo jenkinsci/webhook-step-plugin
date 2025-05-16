@@ -11,12 +11,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.kohsuke.stapler.StaplerRequest2;
+import org.kohsuke.stapler.StaplerResponse2;
 import org.kohsuke.stapler.verb.POST;
 
 @Extension
@@ -42,7 +42,7 @@ public class WebhookRootAction extends CrumbExclusion implements UnprotectedRoot
     }
 
     @POST
-    public void doDynamic(StaplerRequest request, StaplerResponse response) {
+    public void doDynamic(StaplerRequest2 request, StaplerResponse2 response) {
         String token = request.getOriginalRestOfPath().substring(1); // Strip leading slash
         String authHeader = request.getHeader("Authorization");
         Secret secretAuthToken;
