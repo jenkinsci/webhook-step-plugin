@@ -9,7 +9,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
@@ -48,7 +47,7 @@ public class RegisterWebhookStep extends Step {
     }
 
     public FormValidation doCheckToken(@QueryParameter String value) {
-        if (StringUtils.isEmpty(value) || token.equals(URLEncoder.encode(token, StandardCharsets.UTF_8))) {
+        if (value == null || value.isEmpty() || token.equals(URLEncoder.encode(token, StandardCharsets.UTF_8))) {
             return FormValidation.ok();
         }
         return FormValidation.warning(String.format("bad token [%s], it should be passed in urlencoded format", token));
