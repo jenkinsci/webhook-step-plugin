@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 
@@ -31,7 +30,7 @@ public class RegisterWebhookExecution extends SynchronousStepExecution<WebhookTo
 
     @Override
     public WebhookToken run() throws Exception {
-        String token = (step == null || StringUtils.isEmpty(step.token))
+        String token = (step == null || step.token == null || step.token.isEmpty())
                 ? java.util.UUID.randomUUID().toString()
                 : URLEncoder.encode(step.token, StandardCharsets.UTF_8);
         String jenkinsUrl = getContext().get(hudson.EnvVars.class).get("JENKINS_URL");
